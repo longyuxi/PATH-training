@@ -1,0 +1,4 @@
+npys
+**/__pycache__
+persistence/persistence_diagrams
+**/slurm-outs
