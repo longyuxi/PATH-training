@@ -1,4 +1,6 @@
 npys
 **/__pycache__
 persistence/persistence_diagrams
+persistence/persistence_images
 **/slurm-outs
+**/additional_results
