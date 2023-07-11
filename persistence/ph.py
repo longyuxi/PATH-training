@@ -82,12 +82,8 @@ def get_pairwise_opposition_persistence_diagrams(pdb_file, mol2_file):
     ligand_heavy_elements = ['C', 'N', 'O', 'S', 'F', 'P', 'Cl', 'Br', 'I']
     diagrams = []
 
-    # for pe in protein_heavy_elements:
-    #     for le in ligand_heavy_elements:
-
-    # For testing purposes only
-    for pe in protein_heavy_elements[0]:
-        for le in ligand_heavy_elements[0]:
+    for pe in protein_heavy_elements:
+        for le in ligand_heavy_elements:
             # calculate homology (pe, le)
             # opposition_homologies.append(...)
             protein_coords = get_pdb_coordinates_by_element(pdb_file, pe)
