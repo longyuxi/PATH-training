@@ -4,9 +4,9 @@ sys.path.append(str(Path(__file__).parent / '..'))
 
 import argparse
 import traceback
-import pickle
 from gtda.diagrams import PersistenceImage
 import numpy as np
+from tqdm import tqdm
 
 import dispatch_jobs
 import analyze_gbr_importance
@@ -24,6 +24,7 @@ def job(key):
 
 
     d = DB.hgetall(key)
+    print(d)
 
     seed = int(d['seed']) % (2**32)
     train_ratio = float(d['train_ratio'])
@@ -39,8 +40,9 @@ def job(key):
     binding_affinities = []
 
     NPYS_FOLDER = Path('/usr/project/dlab/Users/jaden/gbr-tnet/persistence/persistence_images')
+    # NPYS_FOLDER = Path('/tmp/yl708/persistence_images')
 
-    for file_index in range(len(list(NPYS_FOLDER.glob('binding_affinities_*.npy')))):
+    for file_index in tqdm(range(len(list(NPYS_FOLDER.glob('binding_affinities_*.npy'))))):
         with open(NPYS_FOLDER / f'observations_{file_index}.npy', 'rb') as f:
             observations.append(np.load(f))
 
@@ -51,9 +53,9 @@ def job(key):
     binding_affinities = np.concatenate(binding_affinities)
 
     if 'test' in d:
-        print('Test key detected, using only 10 samples')
-        observations = observations[:10]
-        binding_affinities = binding_affinities[:10]
+        print('Test key detected, using only 20 samples')
+        observations = observations[:20]
+        binding_affinities = binding_affinities[:20]
 
     print(observations.shape)
     print(binding_affinities.shape)
@@ -64,6 +66,8 @@ def job(key):
     observations = observations.reshape(observations.shape[0], -1)  # Flatten out for SVM
 
     X_train, X_test, y_train, y_test = train_test_split(observations, binding_affinities, train_size=train_ratio, random_state=seed)
+
+    del observations
 
     from sklearn.ensemble import GradientBoostingRegressor
 

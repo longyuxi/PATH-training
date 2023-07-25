@@ -47,9 +47,6 @@ def atom_persistence_homology(coords):
     return diagrams_basic
 
 def opposition_homology(protein_coords, ligand_coords):
-    if protein_coords is None or ligand_coords is None:
-        return None
-
     def opposition_distance_metric(vec1, vec2):
         if np.abs(vec1[-1] - vec2[-1]) > 2:  # If the two atoms are not of the same type
             return np.linalg.norm(vec1[:3] - vec2[:3])
@@ -61,6 +58,13 @@ def opposition_homology(protein_coords, ligand_coords):
     ligand_coords = np.concatenate((ligand_coords, 4 * np.ones((len(ligand_coords), 1))), axis=1)
 
     combined_coords = np.concatenate((protein_coords, ligand_coords), axis=0)
+
+    if combined_coords.shape[0] == 0:
+        return None
+
+    if protein_coords is None or ligand_coords is None:
+        return None
+
     # Track connected components, loops, and voids
     homology_dimensions = [0, 1, 2]
 

@@ -61,7 +61,7 @@ def analyze(regr, seed, impurity_importance_html, sorted_impurity_importances_pc
     from sklearn.inspection import permutation_importance
 
     permutation_result = permutation_importance(
-        regr, X_test, y_test, n_repeats=10, random_state=seed, n_jobs=-1
+        regr, X_test, y_test, n_repeats=10, random_state=seed, n_jobs=6,
     )
 
     permutation_top_feature_threshold = 0.005

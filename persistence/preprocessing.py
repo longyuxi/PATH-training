@@ -1,9 +1,11 @@
 from pathlib import Path
 import pickle
+import types
 
 import pandas as pd
 from Bio.PDB import PDBParser
 from biopandas.mol2 import PandasMol2
+from biopandas.pdb import PandasPdb
 import numpy as np
 
 def load_pdbbind_data_index(index_filename: str) -> pd.DataFrame:
@@ -61,13 +63,35 @@ def get_pdb_coordinates_by_element(file, element) -> np.ndarray:
 def get_mol2_coordinates(file):
     # Gets coordinates from a mol2 file
     file = str(file)
-    pmol = PandasMol2().read_mol2(file)
+    if '.mol2' in file:
+        pmol = PandasMol2().read_mol2(file)
+    elif '.pdb' in file:
+        pmol = types.SimpleNamespace()
+        pmol.df = pd.concat([PandasPdb().read_pdb(file).df['ATOM'], PandasPdb().read_pdb(file).df['HETATM']])
+        pmol.df['atom_type'] = pmol.df['atom_name'].str[0]
+        pmol.df['x'] = pmol.df['x_coord']
+        pmol.df['y'] = pmol.df['y_coord']
+        pmol.df['z'] = pmol.df['z_coord']
+    else:
+        raise Exception('Invalid file type.')
+
     return pmol.df[['x', 'y', 'z']].to_numpy()
 
 def get_mol2_coordinates_heavy(file) -> np.ndarray:
     # Similar to get_mol2_coordinates, but only selects the following heavy atoms as detailed Cang and Wei: {C; N; O; S; P; F; Cl; Br}
     file = str(file)
-    pmol = PandasMol2().read_mol2(file)
+    if '.mol2' in file:
+        pmol = PandasMol2().read_mol2(file)
+    elif '.pdb' in file:
+        pmol = types.SimpleNamespace()
+        pmol.df = pd.concat([PandasPdb().read_pdb(file).df['ATOM'], PandasPdb().read_pdb(file).df['HETATM']])
+        pmol.df['atom_type'] = pmol.df['atom_name'].str[0]
+        pmol.df['x'] = pmol.df['x_coord']
+        pmol.df['y'] = pmol.df['y_coord']
+        pmol.df['z'] = pmol.df['z_coord']
+    else:
+        raise Exception('Invalid file type.')
+
     coords = []
 
     for idx in range(len(pmol.df)):
@@ -83,7 +107,18 @@ def get_mol2_coordinates_heavy(file) -> np.ndarray:
 def get_mol2_coordinates_by_element(file, element) -> np.ndarray:
     # Similar to get_mol2_coordinates, but only selects the following heavy atoms as detailed Cang and Wei: {C; N; O; S; P; F; Cl; Br}
     file = str(file)
-    pmol = PandasMol2().read_mol2(file)
+    if '.mol2' in file:
+        pmol = PandasMol2().read_mol2(file)
+    elif '.pdb' in file:
+        pmol = types.SimpleNamespace()
+        pmol.df = pd.concat([PandasPdb().read_pdb(file).df['ATOM'], PandasPdb().read_pdb(file).df['HETATM']])
+        pmol.df['atom_type'] = pmol.df['atom_name'].str[0]
+        pmol.df['x'] = pmol.df['x_coord']
+        pmol.df['y'] = pmol.df['y_coord']
+        pmol.df['z'] = pmol.df['z_coord']
+    else:
+        raise Exception('Invalid file type.')
+
     coords = []
 
     for idx in range(len(pmol.df)):

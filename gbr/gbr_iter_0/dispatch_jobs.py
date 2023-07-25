@@ -29,7 +29,6 @@ if CLUSTER == 'CS':
     NUM_JOBS_TO_SUBMIT = 100
     PYTHON_EXECUTABLE = '/usr/project/dlab/Users/jaden/mambaforge/envs/tnet2017/bin/python'
     ROOT_DIR = str(Path(__file__).parent.resolve())
-    print(f'ROOT_DIR: {ROOT_DIR}')
     os.system(f'mkdir -p {ROOT_DIR}/slurm-outs')
     SBATCH_TEMPLATE = f"""#!/bin/zsh
 #SBATCH --requeue

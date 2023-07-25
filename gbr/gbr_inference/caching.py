@@ -8,8 +8,8 @@ import hashlib
 from functools import wraps
 import inspect
 
-import dispatch_jobs
-DB = dispatch_jobs.get_db()
+from sanitize_filename import sanitize
+from dispatch_jobs import DB
 
 CACHING_DIRECTORY = Path('/usr/project/dlab/Users/jaden/_cache')
 
@@ -17,8 +17,8 @@ def redis_cache(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # Generate a unique key for each function and its arguments
-        print(inspect.getsource(func))
         key = 'cache_' + str(func.__name__) + str(args) + str(kwargs) + str(hashlib.md5(inspect.getsource(func).encode()).hexdigest())
+        key = sanitize(key)
 
         # Check if we already have a result in cache
         result_pickle_filename = DB.get(key)
