@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent / '..' / 'gbr_iter_0'))
+sys.path.append(str(Path(__file__).parent / '..' / '..'))
+from db import DB
 
 import os
 import pickle
@@ -9,7 +11,6 @@ from functools import wraps
 import inspect
 
 from sanitize_filename import sanitize
-from dispatch_jobs import DB
 
 CACHING_DIRECTORY = Path('/usr/project/dlab/Users/jaden/_cache')
 
