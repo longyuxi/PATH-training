@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent / '..'/ 'ph'))
+sys.path.append(str(Path(__file__).parent / '..'))
 
 import argparse
 import pandas as pd
@@ -9,8 +10,7 @@ import pickle
 
 import dispatch_jobs
 import ph
-from ph import INDEX
-from dispatch_jobs import DB
+from db import DB, INDEX
 
 def job(key):
     # The part where the job actually runs, given df and idx as input

@@ -3,30 +3,18 @@
 
 import sys
 from pathlib import Path
+sys.path.append(str(Path(__file__).parent / '..' / 'gbr'  / 'gbr_inference'))
+
 import numpy as np
 from scipy.spatial.distance import cdist
 from gtda.homology import VietorisRipsPersistence
 
 from preprocessing import load_pdbbind_data_index, get_mol2_coordinates_by_element, get_pdb_coordinates_by_element
+from caching import redis_cache
 
 ################
 
 platform = 'CS'  # Cluster specification
-
-if platform == 'local':
-    INDEX_LOCATION = Path('/home/longyuxi/Documents/mount/pdbbind-dataset/index/INDEX_refined_data.2020')
-    BASE_FOLDER = Path('/home/longyuxi/Documents/mount/pdbbind-dataset/refined-set')
-elif platform == 'DCC':
-    INDEX_LOCATION = Path('/hpc/group/donald/yl708/pdbbind/index/INDEX_refined_data.2020')
-    BASE_FOLDER = Path('/hpc/group/donald/yl708/pdbbind/refined-set')
-elif platform == 'CS':
-    INDEX_LOCATION = Path('/usr/project/dlab/Users/jaden/pdbbind/index/INDEX_refined_data.2020')
-    BASE_FOLDER = Path('/usr/project/dlab/Users/jaden/pdbbind/refined-set')
-else:
-    raise NotImplementedError
-
-
-INDEX = load_pdbbind_data_index(INDEX_LOCATION)
 
 ################
 
@@ -80,7 +68,7 @@ def opposition_homology(protein_coords, ligand_coords):
 
     return diagrams_basic
 
-
+@redis_cache
 def get_pairwise_opposition_persistence_diagrams(pdb_file, mol2_file):
     protein_heavy_elements = ['C', 'N', 'O', 'S']
     ligand_heavy_elements = ['C', 'N', 'O', 'S', 'F', 'P', 'Cl', 'Br', 'I']
@@ -97,7 +85,7 @@ def get_pairwise_opposition_persistence_diagrams(pdb_file, mol2_file):
 
     return diagrams
 
-
+@redis_cache
 def get_2345_persistence_diagrams(pdb_file, mol2_file):
 
     homologies = [] # this is used to store all of the calculated persistence diagrams

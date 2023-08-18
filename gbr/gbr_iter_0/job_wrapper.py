@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent / '..'))
+sys.path.append(str(Path(__file__).parent / '..' / '..'))
+from db import DB
 
 import argparse
 import traceback
@@ -8,10 +10,8 @@ from gtda.diagrams import PersistenceImage
 import numpy as np
 from tqdm import tqdm
 
-import dispatch_jobs
 import analyze_gbr_importance
 
-DB = dispatch_jobs.get_db()
 pim = PersistenceImage()
 
 def job(key):

@@ -4,7 +4,11 @@ import logging
 import redis
 from tqdm import tqdm
 import time
-from ph import INDEX
+from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).parent / '..' ))
+from db import DB,INDEX
 
 logging.basicConfig(level=logging.INFO)
 
@@ -40,7 +44,6 @@ cd {ROOT_DIR}
 
     """
 
-    DB = redis.Redis(host='cybermen.cs.duke.edu', port=6379, decode_responses=True, password="topology")
 
     PDBBIND_BASE_FOLDER = '/usr/project/dlab/Users/jaden/pdbbind/refined-set'
     OUTPUT_BASE_FOLDER = '/usr/project/dlab/Users/jaden/gbr-tnet/persistence/persistence_diagrams'

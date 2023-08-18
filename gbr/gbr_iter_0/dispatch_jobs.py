@@ -10,6 +10,10 @@ from tqdm import tqdm
 import time
 from pathlib import Path
 
+import sys
+sys.path.append(str(Path(__file__).parent / '..' / '..'))
+from db import DB
+
 logging.basicConfig(level=logging.INFO)
 
 ###############################
@@ -48,7 +52,6 @@ cd {ROOT_DIR}
 
     """
 
-    DB = redis.Redis(host='cybermen.cs.duke.edu', port=6379, decode_responses=True, password="topology")
 
     ADDITIONAL_SAVE_FOLDER = ROOT_DIR + '/additional_results'
     os.system(f'mkdir -p {ADDITIONAL_SAVE_FOLDER}')
@@ -75,7 +78,6 @@ cd {ROOT_DIR}
 
     """
 
-    DB = redis.Redis(host='dcc-login-03', port=6379, decode_responses=True, password="topology")
     ORIGINAL_PROTEIN_FILE = '/hpc/group/donald/yl708/perturbations-data/1a4k_protein.pdb'
     LIGAND_FILE = '/hpc/group/donald/yl708/perturbations-data/1a4k_ligand.mol2'
     PERTURBATION_SAVE_FOLDER = '/hpc/group/donald/yl708/perturbations-data/'
