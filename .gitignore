@@ -1,7 +1,9 @@
 npys
 **/__pycache__
 persistence/persistence_diagrams
-persistence/persistence_images
+persistence/persistence_images*
 **/slurm-outs
 **/additional_results
 gbr/**/trees
+**/run.sh
+paper_illustrations/persistence_images
