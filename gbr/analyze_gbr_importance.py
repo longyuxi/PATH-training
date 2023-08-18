@@ -1,12 +1,20 @@
+import pickle
+import matplotlib.pyplot as plt
+from sklearn.inspection import permutation_importance
+import numpy as np
+import plotly.express as px
+import pandas as pd
+import numpy as np
+from pathlib import Path
+import pickle
+
+
 def analyze(regr, seed, impurity_importance_html, sorted_impurity_importances_pckl, permutation_importance_html, sorted_permutation_importances_pckl, test_observations, test_binding_affinities):
+    analyze_impurity_importance(regr, impurity_importance_html, sorted_impurity_importances_pckl)
+    # analyze_permutation_importance(regr, seed, permutation_importance_html, sorted_permutation_importances_pckl, test_observations, test_binding_affinities)
 
-    import pickle
-    import matplotlib.pyplot as plt
-    from sklearn.inspection import permutation_importance
-    import numpy as np
-    import plotly.express as px
-    import pandas as pd
 
+def analyze_impurity_importance(regr, impurity_importance_html, sorted_impurity_importances_pckl):
     feature_importance = regr.feature_importances_
 
     top_feature_threshold = 0.005
@@ -43,13 +51,9 @@ def analyze(regr, seed, impurity_importance_html, sorted_impurity_importances_pc
     print(f'Area under Lorenz curve: {auc}')
 
 
+def analyze_permutation_importance(regr, seed, permutation_importance_html, sorted_permutation_importances_pckl, test_observations, test_binding_affinities):
     # ### Permutation importance
     # Which is a better method according to https://explained.ai/rf-importance/
-
-    import numpy as np
-    from pathlib import Path
-    import pickle
-
     # Load test set
 
     from sklearn.model_selection import train_test_split
@@ -61,11 +65,11 @@ def analyze(regr, seed, impurity_importance_html, sorted_impurity_importances_pc
     from sklearn.inspection import permutation_importance
 
     permutation_result = permutation_importance(
-        regr, X_test, y_test, n_repeats=10, random_state=seed, n_jobs=6,
+        regr, X_test, y_test, n_repeats=10, random_state=seed, n_jobs=-1,
     )
 
     permutation_top_feature_threshold = 0.005
-    num_top_permutation_features = len(list(filter(lambda x: x > top_feature_threshold, permutation_result.importances_mean)))
+    num_top_permutation_features = len(list(filter(lambda x: x > permutation_top_feature_threshold, permutation_result.importances_mean)))
 
     df = pd.DataFrame({'feature': np.arange(len(permutation_result.importances_mean)), 'permutation_importance': permutation_result.importances_mean})
 
