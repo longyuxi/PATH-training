@@ -9,12 +9,23 @@ from Bio.PDB import PDBParser, PDBIO
 from tqdm import tqdm
 import time
 from pathlib import Path
+import argparse
+import logging
+
+parser = argparse.ArgumentParser()
+parser.add_argument( '-log',
+                     '--loglevel',
+                     default='warning',
+                     help='Provide logging level. Example --loglevel debug, default=warning' )
+
+args = parser.parse_args()
+
+logging.basicConfig( level=args.loglevel.upper() )
+logging.info( 'Logging now setup.' )
 
 import sys
 sys.path.append(str(Path(__file__).parent / '..' / '..' / '..'))
 from db import DB
-
-logging.basicConfig(level=logging.INFO)
 
 ###############################
 # Platform specific variables #
@@ -37,7 +48,7 @@ if CLUSTER == 'CS':
 #SBATCH --requeue
 #SBATCH --chdir={ROOT_DIR}
 #SBATCH --output={ROOT_DIR}/slurm-outs/%x-%j-slurm.out
-#SBATCH --mem=4000M
+#SBATCH --mem=16000M
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=compsci
 #SBATCH --exclude=linux[1-10]
@@ -128,8 +139,8 @@ def main(dry_run=False, rebuild_all_keys=False):
             break
         info = DB.hgetall(key)
 
-        # if info['finished'] == 'True' and info['error'] == 'False':
-        if info['attempted'] == 'True':
+        if info['finished'] == 'True' and info['error'] == 'False':
+        # if info['attempted'] == 'True':
             continue
         else:
             i += 1
@@ -189,7 +200,7 @@ def populate_db(rebuild_all_keys=False):
 
         if rebuild_all_keys:
             DB.delete(k)
-        
+
         df_index = int(k[len(KEY_PREFIX):])
 
         # Add the entry to the database
