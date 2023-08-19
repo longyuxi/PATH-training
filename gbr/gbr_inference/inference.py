@@ -1,7 +1,8 @@
 import sys
-sys.path.append('../../persistence/')
-import pickle
 from pathlib import Path
+sys.path.append(str((Path(__file__)/ '..' / '..' / '..' / 'persistence').resolve()))
+print(sys.path)
+import pickle
 
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -18,7 +19,7 @@ highly_selected_observations_indices = [16829, 16930, 17031, 17818, 17819, 17917
 tiny_feature_subset_indices = [17819,  18318,  18514,  18908, 288020, 288516,  31500,  31702, 61301,  91001]
 
 # Loads regressors if they are present, otherwise trains them on PDBBind dataset and saves them
-def train_or_load_regrs(force_retrain=False, regr_77_path='regr_with_77_elements.pkl', regr_10_path='regr_with_10_elements.pkl', optimal_mini_gbr_path='optimal_mini_gbr.pkl'):
+def train_or_load_regrs(force_retrain=False, regr_77_path='/usr/project/dlab/Users/jaden/gbr-tnet/gbr/gbr_inference/regr_with_77_elements.pkl', regr_10_path='/usr/project/dlab/Users/jaden/gbr-tnet/gbr/gbr_inference/regr_with_10_elements.pkl', optimal_mini_gbr_path='/usr/project/dlab/Users/jaden/gbr-tnet/gbr/gbr_inference/optimal_mini_gbr.pkl'):
     all_gbrs_exist = Path(regr_77_path).exists() and Path(regr_10_path).exists() and Path(optimal_mini_gbr_path).exists()
 
     if all_gbrs_exist and not force_retrain:
@@ -127,8 +128,10 @@ def get_all_images(protein_file, ligand_file):
     return all_images
 
 def predict(protein_file, ligand_file):
+    print('Computing persistence images')
     all_images = get_all_images(protein_file, ligand_file)
 
+    print('Predicting')
     observations = np.array(all_images).flatten().reshape(1, -1)
     observation_77 = observations[:, highly_selected_observations_indices]
     observation_10 = observations[:, tiny_feature_subset_indices]
