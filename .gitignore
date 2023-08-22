@@ -7,3 +7,4 @@ persistence/persistence_images*
 gbr/**/trees
 **/run.sh
 paper_illustrations/persistence_images
+paper_illustrations/relevant_vectors
