@@ -29,3 +29,5 @@ else:
 
 
 INDEX = load_pdbbind_data_index(INDEX_LOCATION)
+
+PDBBIND_BASE_FOLDER = '/usr/project/dlab/Users/jaden/pdbbind/refined-set'
