@@ -3,7 +3,9 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent / '..'))
 sys.path.append(str(Path(__file__).parent / '..' / '..'))
 sys.path.append(str(Path(__file__).parent / '..' / '..' / '..'))
+sys.path.append(str(Path(__file__).parent / '..' / '..' / '..' / 'persistence'))
 from db import DB
+from preprocessing import get_mol2_coordinates
 
 import argparse
 import traceback
@@ -24,10 +26,19 @@ def job(key):
     ligand_file = d['Ligand File']
 
     predictions = inference.predict(protein_file, ligand_file)
+    fingerprint = inference.get_fingerprint(protein_file, ligand_file)
+
+    num_protein_atoms = len(get_mol2_coordinates(d['Protein File']))
+    num_ligand_atoms = len(get_mol2_coordinates(d['Ligand File']))
+    total_atoms = num_protein_atoms + num_ligand_atoms
 
     # Save results
     DB.hset(key, mapping={
         **d,
+        'fingerprint': str(fingerprint),
+        'num_protein_atoms': str(num_protein_atoms),
+        'num_ligand_atoms': str(num_ligand_atoms),
+        'total_atoms': str(total_atoms),
         **predictions
     })
 

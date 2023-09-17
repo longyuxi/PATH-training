@@ -223,5 +223,5 @@ def get_db():
 
 if __name__ == '__main__':
     # rebuild_db()
-    main(dry_run=True)
+    main(dry_run=True, rebuild_all_keys=True)
     main(dry_run=False)
