@@ -48,7 +48,7 @@ if CLUSTER == 'CS':
 #SBATCH --requeue
 #SBATCH --chdir={ROOT_DIR}
 #SBATCH --output={ROOT_DIR}/slurm-outs/%x-%j-slurm.out
-#SBATCH --mem=16000M
+#SBATCH --mem=32000M
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=compsci
 #SBATCH --exclude=linux[1-10]

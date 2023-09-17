@@ -23,10 +23,12 @@ def job(key):
     ligand_file = d['ligand_file']
 
     predictions = inference.predict(protein_file, ligand_file)
+    fingerprint = inference.get_fingerprint(protein_file, ligand_file)
 
     # Save results
     DB.hset(key, mapping={
         **d,
+        'fingerprint': str(fingerprint),
         **predictions
     })
 
