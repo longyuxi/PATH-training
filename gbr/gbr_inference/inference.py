@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 sys.path.append(str((Path(__file__)/ '..' / '..' / '..' / 'persistence').resolve()))
-print(sys.path)
 import pickle
 
 import numpy as np
@@ -9,9 +8,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import r2_score
 import plotly.express as px
+from joblib import Memory
+memory = Memory("__joblib_cache__", verbose=0)
 
 import ph
-from caching import redis_cache
 from gudhi.representations.vector_methods import PersistenceImage
 
 highly_selected_observations_indices = [16829, 16930, 17031, 17818, 17819, 17917, 17918, 17919, 17920, 18019, 18020, 18021, 18115, 18116, 18117, 18120, 18121, 18214, 18215, 18216, 18217, 18218, 18313, 18314, 18315, 18316, 18317, 18318, 18413, 18415, 18416, 18417, 18418, 18514, 18516, 18517, 18610, 18615, 18710, 18711, 18811, 18812, 18908, 18912, 18913, 19110, 287524, 287620, 287719, 287720, 287721, 287818, 287821, 287822, 287919, 287921, 287922, 287923, 288020, 288022, 288121, 288219, 288314, 288415, 288516, 31500, 31700, 31701, 31702, 61301, 91000, 91001, 91002, 91802, 92100, 92101, 92102]
@@ -117,7 +117,7 @@ def diagram_to_image(diagram):
 
 
 # Takes protein file, ligand file, and predicts
-@redis_cache
+@memory.cache
 def get_all_images(protein_file, ligand_file):
     # do persistent homology on protein_file and ligand_file
     pw_opposition_diagrams = ph.get_pairwise_opposition_persistence_diagrams(protein_file, ligand_file)
@@ -145,6 +145,12 @@ def predict(protein_file, ligand_file):
         'prediction_10': prediction_10,
         'prediction_mini': prediction_mini
     }
+
+def get_fingerprint(protein_file, ligand_file):
+    all_images = get_all_images(protein_file, ligand_file)
+    observations = np.array(all_images).flatten().reshape(1, -1)
+    observation_10 = observations[:, tiny_feature_subset_indices]
+    return observation_10[0]
 
 
 if __name__ == '__main__':

@@ -10,7 +10,6 @@ from scipy.spatial.distance import cdist
 from gtda.homology import VietorisRipsPersistence
 
 from preprocessing import load_pdbbind_data_index, get_mol2_coordinates_by_element, get_pdb_coordinates_by_element
-from caching import redis_cache
 
 ################
 
@@ -68,7 +67,6 @@ def opposition_homology(protein_coords, ligand_coords):
 
     return diagrams_basic
 
-@redis_cache
 def get_pairwise_opposition_persistence_diagrams(pdb_file, mol2_file):
     protein_heavy_elements = ['C', 'N', 'O', 'S']
     ligand_heavy_elements = ['C', 'N', 'O', 'S', 'F', 'P', 'Cl', 'Br', 'I']
@@ -85,7 +83,6 @@ def get_pairwise_opposition_persistence_diagrams(pdb_file, mol2_file):
 
     return diagrams
 
-@redis_cache
 def get_2345_persistence_diagrams(pdb_file, mol2_file):
 
     homologies = [] # this is used to store all of the calculated persistence diagrams
