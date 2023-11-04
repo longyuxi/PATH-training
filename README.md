@@ -28,6 +28,11 @@ As mentioned, a Redis database is used for managing jobs submitted to the SLURM 
 3. Create a `redis.conf` file somewhere and set a default password by putting e.g. `requirepass topology` in that file.
 4. Start the redis server on a host with your `redis.conf` and adjust the `DB` constant in `dispatch_jobs.py` accordingly.
 
+## 3. Clone this repository
+
+1. Install [git lfs](https://git-lfs.com/).
+2. Clone this repository.
+
 # Persistence image construction
 
 The `persistence` folder contains scripts that construct persistence images using the opposition distance. Start with `persistence/README.md`
