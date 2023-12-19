@@ -1,14 +1,43 @@
+## This file is part of PATH, which is part of OSPREY 3.0
+##
+## OSPREY Protein Redesign Software Version 3.0
+## Copyright (C) 2001-2023 Bruce Donald Lab, Duke University
+##
+## OSPREY is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License version 2
+## as published by the Free Software Foundation.
+##
+## You should have received a copy of the GNU General Public License
+## along with OSPREY.  If not, see <http://www.gnu.org/licenses/>.
+##
+## OSPREY relies on grants for its development, and since visibility
+## in the scientific literature is essential for our success, we
+## ask that users of OSPREY cite our papers. See the CITING_OSPREY
+## document in this distribution for more information.
+##
+## Contact Info:
+##    Bruce Donald
+##    Duke University
+##    Department of Computer Science
+##    Levine Science Research Center (LSRC)
+##    Durham
+##    NC 27708-0129
+##    USA
+##    e-mail: www.cs.duke.edu/brd/
+##
+## <signature of Bruce Donald>, Mar 1, 2023
+## Bruce Donald, Professor of Computer Science
+
 import pickle
-import matplotlib.pyplot as plt
 from sklearn.inspection import permutation_importance
 import numpy as np
 import plotly.express as px
 import pandas as pd
 import numpy as np
-from pathlib import Path
 import pickle
 
 
+# Permutation importance takes an uncanny amount of time to run for the 1.2M persistent homology features, and the impurity-based feature importance seems already sufficient, so we will not use permutation importance.
 def analyze(regr, seed, impurity_importance_html, sorted_impurity_importances_pckl, permutation_importance_html, sorted_permutation_importances_pckl, test_observations, test_binding_affinities):
     analyze_impurity_importance(regr, impurity_importance_html, sorted_impurity_importances_pckl)
     # analyze_permutation_importance(regr, seed, permutation_importance_html, sorted_permutation_importances_pckl, test_observations, test_binding_affinities)

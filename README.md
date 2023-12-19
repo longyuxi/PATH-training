@@ -40,3 +40,9 @@ The `persistence` folder contains scripts that construct persistence images usin
 # Feature selection, model training, and validation
 
 The `gbr` folder contains of scripts that perform feature selection, model training, and validation of the gradient boosting regressor on persistence images to eventually lead to the formulation of persistence fingerprint and PATH. Start with `gbr/README.md`.
+
+
+
+# Citation requirements
+
+See [CITING_OSPREY.txt](CITING_OSPREY.txt).
